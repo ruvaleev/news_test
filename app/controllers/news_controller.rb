@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NewsController < ApplicationController
   def index
     news = News.all
@@ -6,6 +8,8 @@ class NewsController < ApplicationController
 
   def show
     news = News.find(params[:id])
-    render json: NewsBlueprint.render(news, view: :extended)
+    translated_news = news.translated(params[:lang])
+    render json: { regular: NewsBlueprint.render(news, view: :extended),
+                   translated: NewsBlueprint.render(translated_news, view: :extended) }
   end
 end
